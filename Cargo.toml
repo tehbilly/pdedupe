@@ -1,0 +1,14 @@
+[package]
+name = "pdedupe"
+version = "0.1.0"
+authors = ["William McGann <contact@williammcgann.com>"]
+edition = "2018"
+
+[profile.release]
+lto = true
+codegen-units = 1
+incremental = false
+opt-level = "z"
+
+[dependencies]
+getopts = "0.2"
