@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use std::env;
 use std::path::Path;
 use getopts::Options;
@@ -29,7 +28,7 @@ fn main() {
         eprintln!("Original number of path entries: {}", num_original);
     }
 
-    let mut uniques = HashSet::new();
+    let mut uniques: Vec<String> = Vec::new();
     original.iter().for_each(|p| {
         if matches.opt_present("e") && !Path::new(&p).exists() {
             if matches.opt_present("v") {
@@ -37,8 +36,10 @@ fn main() {
             }
             return;
         }
-        if !uniques.insert(p) && matches.opt_present("v") {
-            eprintln!("Removed duplicate entry: {}", p);
+        if !uniques.contains(p) {
+            uniques.push(p.to_string());
+        } else if matches.opt_present("v") {
+            eprintln!("Ignoring duplicate entry: {}", p);
         }
     });
 
