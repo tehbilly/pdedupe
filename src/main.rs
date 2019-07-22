@@ -7,6 +7,7 @@ fn main() {
     let program_name = args[0].clone();
 
     let mut opts = Options::new();
+    opts.optopt("", "var", "The environment variable to use. Defaults to PATH.", "VARIABLE");
     opts.optflag("h", "help", "Print help information");
     opts.optflag("v", "verbose", "Print output to stderr");
     opts.optflag("e", "exists", "Don't add any paths that aren't resolvable");
@@ -16,12 +17,17 @@ fn main() {
         Err(f) => { panic!(f.to_string()) }
     };
 
+    let var = match matches.opt_str("var") {
+        Some(v) => v,
+        None => "PATH".to_string()
+    };
+
     if matches.opt_present("h") {
         print_usage(&program_name, opts);
         return;
     }
 
-    let original = get_path_env();
+    let original = get_env_values(var);
     let num_original = original.len();
 
     if matches.opt_present("v") {
@@ -55,8 +61,13 @@ fn print_usage(program: &str, opts: Options) {
     print!("Usage: {} [options]", opts.usage(&brief));
 }
 
-fn get_path_env() -> Vec<String> {
-    env::split_paths(&env::var("PATH").unwrap())
+fn get_env_values(var: String) -> Vec<String> {
+    let value = match env::var(var) {
+        Ok(v) => v,
+        _ => "".to_string()
+    };
+
+    env::split_paths(value.as_str())
         .map(|p| p.into_os_string().into_string().unwrap())
         .collect()
 }
