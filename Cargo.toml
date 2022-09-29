@@ -11,4 +11,4 @@ incremental = false
 opt-level = "z"
 
 [dependencies]
-getopts = "0.2"
+structopt = "0.3"
