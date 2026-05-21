@@ -1,14 +1,11 @@
 [package]
 name = "pdedupe"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["William McGann <contact@williammcgann.com>"]
-edition = "2018"
+edition = "2024"
 
 [profile.release]
 lto = true
 codegen-units = 1
 incremental = false
 opt-level = "z"
-
-[dependencies]
-structopt = "0.3"
